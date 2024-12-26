@@ -1,0 +1,42 @@
+# ---
+
+services:
+  app:
+    build: .
+    image: counter-app:latest
+    container_name: counter-app
+    environment:
+      - POSTGRES_HOST=postgres
+    ports: 
+      - 5000:5000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16.4-alpine
+    container_name: "counter-postgres"
+    environment:
+      POSTGRES_DB: "counterdb"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - counter-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: "counter-adminer"
+    ports:
+      - 8080:8080
+
+
+volumes:
+  counter-postgres:
+    driver: local
+    name: counter-postgres
