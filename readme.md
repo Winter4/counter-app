@@ -27,3 +27,6 @@
 
 Стучимся в наше приложение
 ![request](request.png)
+
+Смотрим результат в БД
+![adminer](adminer.png)
